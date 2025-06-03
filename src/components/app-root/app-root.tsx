@@ -13,7 +13,7 @@ export class AppRoot {
       <div>
         <header>
             <h1 onClick={() => Router.push("/")}>
-              Stencil App Starter
+              ThinkPad - A Home for your Headspace!
             </h1>
         </header>
 
@@ -22,10 +22,7 @@ export class AppRoot {
             <Route path="/">
               <app-home />
             </Route>
-            <Route
-              path={match("/profile/:name")}
-              render={({ name }) => <app-profile name={name} />}
-            />
+            
           </Router.Switch>
         </main>
       </div>
