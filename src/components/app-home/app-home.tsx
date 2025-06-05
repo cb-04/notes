@@ -10,7 +10,7 @@ export class AppHome {
   render() {
     return (
       <div class="app-home">
-        TODO : call notes-list component
+        TODO : Create notes-list component
       </div>
     );
   }
