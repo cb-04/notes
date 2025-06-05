@@ -12,7 +12,7 @@ export class AppRoot {
     return (
       <div>
         <header>
-            <h1 onClick={() => Router.push("/")}>
+            <h1>
               ThinkPad - A Home for your Headspace!
             </h1>
         </header>

@@ -10,7 +10,7 @@ describe('fsk-notes-list', () => {
     expect(page.root).toEqualHtml(`
       <fsk-notes-list>
         <mock:shadow-root>
-          <slot></slot>
+          <div>Create Notes List Render</div>
         </mock:shadow-root>
       </fsk-notes-list>
     `);
