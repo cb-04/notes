@@ -1,4 +1,8 @@
-import { Component, Host, h } from '@stencil/core';
+import { Component, h } from '@stencil/core';
+
+/**
+ * Lists notes
+*/
 
 @Component({
   tag: 'fsk-notes-list',
