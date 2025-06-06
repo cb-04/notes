@@ -7,6 +7,10 @@ const list =
    {"id":"4","datetime":"2020-03-04%13:13","title":"My Fourth Note"}
 ]`;
 
+/**
+ * Returns list of all notes
+ */
+
 export function getList(){
     return(JSON.parse(list));
 }
