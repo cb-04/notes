@@ -16,6 +16,10 @@ export namespace Components {
     interface FskNotesList {
     }
 }
+export interface FskNotesListCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLFskNotesListElement;
+}
 declare global {
     interface HTMLAppHomeElement extends Components.AppHome, HTMLStencilElement {
     }
@@ -29,10 +33,21 @@ declare global {
         prototype: HTMLAppRootElement;
         new (): HTMLAppRootElement;
     };
+    interface HTMLFskNotesListElementEventMap {
+        "selectedNote": any;
+    }
     /**
      * Lists notes
      */
     interface HTMLFskNotesListElement extends Components.FskNotesList, HTMLStencilElement {
+        addEventListener<K extends keyof HTMLFskNotesListElementEventMap>(type: K, listener: (this: HTMLFskNotesListElement, ev: FskNotesListCustomEvent<HTMLFskNotesListElementEventMap[K]>) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+        addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLFskNotesListElementEventMap>(type: K, listener: (this: HTMLFskNotesListElement, ev: FskNotesListCustomEvent<HTMLFskNotesListElementEventMap[K]>) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof DocumentEventMap>(type: K, listener: (this: Document, ev: DocumentEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener<K extends keyof HTMLElementEventMap>(type: K, listener: (this: HTMLElement, ev: HTMLElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+        removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
     }
     var HTMLFskNotesListElement: {
         prototype: HTMLFskNotesListElement;
@@ -53,6 +68,7 @@ declare namespace LocalJSX {
      * Lists notes
      */
     interface FskNotesList {
+        "onSelectedNote"?: (event: FskNotesListCustomEvent<any>) => void;
     }
     interface IntrinsicElements {
         "app-home": AppHome;
