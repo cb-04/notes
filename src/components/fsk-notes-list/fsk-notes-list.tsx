@@ -14,7 +14,13 @@ dayjs.locale('en');
   styleUrl: 'fsk-notes-list.css',
   shadow: true,
 })
+
 export class FskNotesList {
+
+  onSelectNote(noteid:number){
+    console.log(noteid);
+  }
+
   render() {
     const notes = getList();
     return (
@@ -29,7 +35,7 @@ export class FskNotesList {
           </thead>
           <tbody>
             {notes.map((note:any, index:number)=>
-              <tr>
+              <tr onClick={()=>this.onSelectNote(note.id)}>
                 <td>{index+1}</td>
                 <td>{dayjs(note.datetime)
                      .format('MMMM D, YYYY h:mm A')}</td>
