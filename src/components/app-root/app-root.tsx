@@ -5,13 +5,13 @@ import { Route } from "stencil-router-v2";
 @Component({
   tag: 'app-root',
   styleUrl: 'app-root.css',
-  shadow: true,
+  shadow: false
 })
 export class AppRoot {
   render() {
     return (
       <div>
-        <header>
+        <header class="root-header">
             <h1>
               ThinkPad - A Home for your Headspace!
             </h1>
