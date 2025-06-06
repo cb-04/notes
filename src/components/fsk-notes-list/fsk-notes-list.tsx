@@ -19,7 +19,6 @@ export class FskNotesList {
     const notes = getList();
     return (
       <div>
-        <div>Notes List</div>
         <table>
           <thead>
             <tr>
