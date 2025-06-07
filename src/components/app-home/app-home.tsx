@@ -19,6 +19,10 @@ export class AppHome {
       onSelectedNote(event:CustomEvent){
         this.noteDisplay = <fsk-note note-id={event.detail}></fsk-note>
       }
+  @Listen('closedNote')
+      onClosedNote() {
+        this.noteDisplay = null;
+      }
   render() {
     return(
       <div class="app-home">

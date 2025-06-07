@@ -37,4 +37,30 @@ describe('app-home tests', () => {
       </div>`
     );
   });
+
+  it('should close note on receiving closedNote event', async () => {
+    const page = await newSpecPage({
+      components: [AppHome],
+      html: `<app-home></app-home>`,
+    });
+
+    const selectedNoteEvent = new CustomEvent(
+      'selectedNote',{'detail':'1'}
+    );
+    page.root.dispatchEvent(selectedNoteEvent);
+    await page.waitForChanges();
+
+    const closedNoteEvent = new CustomEvent(
+      'closedNote'
+    );
+    page.root.dispatchEvent(closedNoteEvent);
+    await page.waitForChanges();
+
+
+    expect(page.root.shadowRoot).toEqualHtml(
+      `<div class="app-home">
+           <fsk-notes-list></fsk-notes-list>
+      </div>`
+    );
+  });
 });
