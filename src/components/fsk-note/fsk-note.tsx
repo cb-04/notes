@@ -1,4 +1,4 @@
-import { Component, h } from '@stencil/core';
+import { Component, h, Prop } from '@stencil/core';
 
 /**
  * Displays a note
@@ -10,9 +10,13 @@ import { Component, h } from '@stencil/core';
   shadow: true,
 })
 export class FskNote {
+  /** 
+   * HTML property note-id: id of the note to display
+  */
+  @Prop() noteId: number;
   render() {
     return (
-      <div>TODO: display a note</div>
+      <div>Now displaying note: {this.noteId}</div>
     );
   }
 }
