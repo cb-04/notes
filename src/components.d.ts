@@ -68,6 +68,10 @@ declare namespace LocalJSX {
      * Lists notes
      */
     interface FskNotesList {
+        /**
+          * Sent when user selects a note by clicking on it
+          * @event
+         */
         "onSelectedNote"?: (event: FskNotesListCustomEvent<any>) => void;
     }
     interface IntrinsicElements {

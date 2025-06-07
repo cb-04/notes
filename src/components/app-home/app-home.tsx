@@ -1,4 +1,4 @@
-import { Component, h } from '@stencil/core';
+import { Component, h, Listen, State } from '@stencil/core';
 //import { Router } from "../../";
 
 @Component({
@@ -7,10 +7,23 @@ import { Component, h } from '@stencil/core';
   shadow: true,
 })
 export class AppHome {
+  /** 
+   * Will cause render to display the contents of a note
+  */
+  @State() noteDisplay = '';
+  /**
+   * Event handler for selectedNote event
+   * @param event - selectedNote event received when user selects note
+   */
+  @Listen('selectedNote')
+      onSelectedNote(event:CustomEvent){
+        this.noteDisplay = <p>Now showing note {event.detail}</p>
+      }
   render() {
-    return (
+    return(
       <div class="app-home">
         <fsk-notes-list></fsk-notes-list>
+        {this.noteDisplay}
       </div>
     );
   }
