@@ -1,4 +1,17 @@
 import { newSpecPage } from '@stencil/core/testing';
+
+const list = JSON.parse(
+   `[
+   {"id":"1","datetime":"2020-03-01%10:10","title":"My First Note"},
+   {"id":"2","datetime":"2020-03-02%11:11","title":"My Second Note"},
+   {"id":"3","datetime":"2020-03-03%12:12","title":"My Third Note"},
+   {"id":"4","datetime":"2020-03-04%13:13","title":"My Fourth Note"}
+   ]`
+);
+
+jest.mock('../../../library/NotesData', () => ({
+  getNote: (id:number) => {return list[id-1]}
+}));
 import { FskNote } from '../fsk-note';
 
 describe('fsk-note', () => {
@@ -12,7 +25,7 @@ describe('fsk-note', () => {
         <mock:shadow-root>
           <div class="fsk-note">
             <header class="fsk-note-header">
-            <strong>Note Title</strong>
+            <strong>My First Note</strong>
             <nav class="fsk-close-button">Close</nav>
             </header>
             <div class="fsk-note-content">Now displaying note: 1<br/>

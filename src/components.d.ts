@@ -106,6 +106,10 @@ declare namespace LocalJSX {
           * HTML property note-id: id of the note to display
          */
         "noteId"?: number;
+        /**
+          * Sent when user clicks on Close button
+          * @event
+         */
         "onClosedNote"?: (event: FskNoteCustomEvent<any>) => void;
     }
     /**
