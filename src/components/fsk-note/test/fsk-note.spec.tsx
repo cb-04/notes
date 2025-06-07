@@ -23,14 +23,15 @@ describe('fsk-note', () => {
     expect(page.root).toEqualHtml(`
       <fsk-note note-id="1">
         <mock:shadow-root>
+        <div class="note-container animate-open">
           <div class="fsk-note">
-            <header class="fsk-note-header">
-            <strong>My First Note</strong>
-            <nav class="fsk-close-button">Close</nav>
-            </header>
-            <div class="fsk-note-content">Text for My First Note<br/>
-            </div>
+           <header class="fsk-note-header">
+             <strong>My First Note</strong>
+             <nav class="fsk-close-button">Close</nav>
+           </header>
+          <div class="fsk-note-content">Text for My First Note</div>
           </div>
+        </div>
         </mock:shadow-root>
       </fsk-note>
     `);

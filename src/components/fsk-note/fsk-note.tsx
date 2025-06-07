@@ -34,12 +34,13 @@ export class FskNote {
   render() {
     const note = getNote(this.noteId);
     return (
-      <div class="fsk-note">
+      <div class="note-container animate-open">
+        <div class="fsk-note">
         <header class="fsk-note-header">
           <strong>{note.title}</strong>
           <nav class="fsk-close-button" onClick={() => this.onCloseNote()}>Close</nav>
         </header>
-        <div class="fsk-note-content">{note.text}<br/>
+        <div class="fsk-note-content">{note.text}</div>
         </div>
       </div>
     );
