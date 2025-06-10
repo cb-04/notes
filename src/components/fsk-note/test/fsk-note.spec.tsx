@@ -9,8 +9,13 @@ const list = JSON.parse(
    ]`
 );
 
+const saveOut = [];
 jest.mock('../../../library/NotesData', () => ({
-  getNote: (id:number) => {return list[id-1]}
+  getNote: (id:number) => {return list[id-1]},
+  saveNote: (id:number, title:string, text:string) => {
+    const saved : {id:number, title:string, text:string} = {id, title, text};
+    saveOut.push(saved);
+  }
 }));
 import { FskNote } from '../fsk-note';
 
@@ -26,11 +31,11 @@ describe('fsk-note', () => {
         <div class="note-container animate-open">
           <div class="fsk-note">
            <header class="fsk-note-header">
-             <input value="My First Note"/>
+             <input id="fsk-note-title" value="My First Note"/>
              <nav id="fsk-note-save" class="fsk-close-button">Save</nav>
              <nav id="fsk-note-close" class="fsk-close-button">Close</nav>
            </header>
-          <textarea class="fsk-note-content">Text for My First Note</textarea>
+          <textarea id="fsk-note-content">Text for My First Note</textarea>
           </div>
         </div>
         </mock:shadow-root>
@@ -55,4 +60,30 @@ describe('fsk-note', () => {
     expect(spy).toHaveBeenCalled();
   });
 
+  it('should save note when save button is clicked', async () => {
+    //Fetching the page
+    const page = await newSpecPage({
+      components: [FskNote],
+      html: `<fsk-note note-id="1"></fsk-note>`,
+    });
+    //Changing values for the title and the content of the note
+    const title: HTMLInputElement = 
+      (page.root.shadowRoot.querySelector('#fsk-note-title'));
+    title.value = "Test Note Title";
+
+    const content: HTMLInputElement = 
+      (page.root.shadowRoot.querySelector('#fsk-note-content'));
+    content.value = "Test Note Content";
+
+    //Click on the save button
+    const button : HTMLElement = 
+      (page.root.shadowRoot.querySelector('#fsk-note-save'));
+    button.click();
+    await page.waitForChanges();
+
+    //Check results are as expected
+    const expectedSave = 
+       {id:1, title:'Test Note Title', text:'Test Note Content'};
+    expect(saveOut).toEqual([expectedSave]);
+  });
 });

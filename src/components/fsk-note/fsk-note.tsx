@@ -1,5 +1,5 @@
-import { Component, h, Prop, Event, EventEmitter } from '@stencil/core';
-import {getNote} from '../../library/NotesData';
+import { Component, h, Prop, Event, EventEmitter, Element } from '@stencil/core';
+import {getNote, saveNote} from '../../library/NotesData';
 
 /**
  * Displays a note
@@ -11,6 +11,8 @@ import {getNote} from '../../library/NotesData';
   shadow: true,
 })
 export class FskNote {
+
+  @Element() el: HTMLElement;
 
   /** 
    * HTML property note-id: id of the note to display
@@ -31,7 +33,10 @@ export class FskNote {
     this.closedNote.emit()
   }
   onSaveNote(){
-    console.log('save button');
+    const root = this.el.shadowRoot;
+    const title : HTMLInputElement = root.querySelector('#fsk-note-title');
+    const text : HTMLInputElement = root.querySelector('#fsk-note-content');
+    saveNote(this.noteId, title.value, text.value);
   }
 
   render() {
@@ -40,11 +45,11 @@ export class FskNote {
       <div class="note-container animate-open">
         <div class="fsk-note">
         <header class="fsk-note-header">
-          <input value={note.title}/>
+          <input id="fsk-note-title"value={note.title}/>
           <nav id="fsk-note-save" class="fsk-close-button" onClick={() => this.onSaveNote()}>Save</nav>
           <nav id="fsk-note-close" class="fsk-close-button" onClick={() => this.onCloseNote()}>Close</nav>
         </header>
-        <textarea class="fsk-note-content">
+        <textarea id="fsk-note-content">
           {note.text}
         </textarea>
         </div>
