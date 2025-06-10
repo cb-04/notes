@@ -37,10 +37,12 @@ export class FskNote {
       <div class="note-container animate-open">
         <div class="fsk-note">
         <header class="fsk-note-header">
-          <strong>{note.title}</strong>
+          <input value={note.title}/>
           <nav class="fsk-close-button" onClick={() => this.onCloseNote()}>Close</nav>
         </header>
-        <div class="fsk-note-content">{note.text}</div>
+        <textarea class="fsk-note-content">
+          {note.text}
+        </textarea>
         </div>
       </div>
     );

@@ -26,10 +26,10 @@ describe('fsk-note', () => {
         <div class="note-container animate-open">
           <div class="fsk-note">
            <header class="fsk-note-header">
-             <strong>My First Note</strong>
+             <input value="My First Note"/>
              <nav class="fsk-close-button">Close</nav>
            </header>
-          <div class="fsk-note-content">Text for My First Note</div>
+          <textarea class="fsk-note-content">Text for My First Note</textarea>
           </div>
         </div>
         </mock:shadow-root>
