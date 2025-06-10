@@ -30,6 +30,9 @@ export class FskNote {
   onCloseNote(){
     this.closedNote.emit()
   }
+  onSaveNote(){
+    console.log('save button');
+  }
 
   render() {
     const note = getNote(this.noteId);
@@ -38,7 +41,8 @@ export class FskNote {
         <div class="fsk-note">
         <header class="fsk-note-header">
           <input value={note.title}/>
-          <nav class="fsk-close-button" onClick={() => this.onCloseNote()}>Close</nav>
+          <nav id="fsk-note-save" class="fsk-close-button" onClick={() => this.onSaveNote()}>Save</nav>
+          <nav id="fsk-note-close" class="fsk-close-button" onClick={() => this.onCloseNote()}>Close</nav>
         </header>
         <textarea class="fsk-note-content">
           {note.text}

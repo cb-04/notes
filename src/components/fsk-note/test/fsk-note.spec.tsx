@@ -27,7 +27,8 @@ describe('fsk-note', () => {
           <div class="fsk-note">
            <header class="fsk-note-header">
              <input value="My First Note"/>
-             <nav class="fsk-close-button">Close</nav>
+             <nav id="fsk-note-save" class="fsk-close-button">Save</nav>
+             <nav id="fsk-note-close" class="fsk-close-button">Close</nav>
            </header>
           <textarea class="fsk-note-content">Text for My First Note</textarea>
           </div>
@@ -36,4 +37,22 @@ describe('fsk-note', () => {
       </fsk-note>
     `);
   });
+
+  it('should emit event when the close button is clicked', async () => {
+    const page = await newSpecPage({
+      components: [FskNote],
+      html: `<fsk-note note-id="1"></fsk-note>`
+    });
+
+    const button : HTMLElement
+       = (page.root.shadowRoot.querySelector("#fsk-note-close"));
+    const spy = jest.fn();
+    page.win.addEventListener('closedNote',spy);
+
+    button.click();
+    await page.waitForChanges();
+
+    expect(spy).toHaveBeenCalled();
+  });
+
 });

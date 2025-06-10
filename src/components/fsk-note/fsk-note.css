@@ -60,12 +60,29 @@
   font-family: 'Cormorant Garamond', serif;
 }
 
+.fsk-note-header input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px dashed #c2ae8d;
+  font-family: 'Georgia', serif;
+  font-style: italic;
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #865f3c;
+  padding: 2px 5px;
+  flex-grow: 1;
+  margin-right: 10px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
 .fsk-close-button {
   cursor: pointer;
   color: #865f3c;
   font-style: italic;
   font-size: 1rem;
   font-family: 'Georgia', serif;
+  margin-left: 15px;
 }
 
 .fsk-close-button:hover {
@@ -73,14 +90,22 @@
   text-decoration: underline;
 }
 
-
 .fsk-note-content {
-  white-space: pre-wrap;
+  width: 100%;
+  min-height: 200px;
+  background: transparent;
+  border: none;
+  resize: none;
+  outline: none;
+  padding: 5px;
   font-family: 'Dancing Script', 'Georgia', cursive;
   font-size: 1.1rem;
-  color: #3b2f2f;
+  color: #865f3c;
   line-height: 1.75;
 }
+
+
+
 
 
 
