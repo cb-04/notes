@@ -22,4 +22,25 @@ describe('NotesData Tests',()=>{
         notesData.saveNote(1,"Edited Test Title","Edited Test Text");
         expect(notesData.getNote(1)).toEqual(expectedResults);
     })
+
+    test('addNode should add a new note', ()=>{
+        const expectedResults = JSON.parse(`
+            {"id":"5","datetime":"2020-05-14T05:50:00.000Z",
+             "title":"Untitled",
+             "text":""
+            }
+            `);
+
+            //Mock Date.now() to return a fixed testable date-time
+            jest.spyOn(global.Date, 'now')
+                .mockImplementationOnce(() => 
+                    new Date('2020-05-14%11:20').valueOf()
+                );
+
+            //Add note 5 and check for results
+            notesData.addNote();
+            const actual = notesData.getNote(5);
+            actual.id = actual.id.toString(); // enforced id to string
+            expect(actual).toEqual(expectedResults);
+    });
 }); 
