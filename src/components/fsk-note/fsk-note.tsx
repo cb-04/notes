@@ -25,6 +25,13 @@ export class FskNote {
 
   @Event() closedNote: EventEmitter;
 
+  /** 
+   * Sent when user clicks on Save button
+   * @event
+  */
+
+  @Event() savedNote: EventEmitter;
+
   /**
    * Called from HTML when user clicks on the Close button
    */
@@ -37,6 +44,8 @@ export class FskNote {
     const title : HTMLInputElement = root.querySelector('#fsk-note-title');
     const text : HTMLInputElement = root.querySelector('#fsk-note-content');
     saveNote(this.noteId, title.value, text.value);
+
+    this.savedNote.emit();
   }
 
   render() {

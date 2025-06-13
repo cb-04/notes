@@ -1,15 +1,19 @@
 import { newSpecPage } from '@stencil/core/testing';
 
-
-jest.mock('../../../library/NotesData', ()=>({
-  getList: () => JSON.parse(
+let getNotesListCount = 0;
+const data = JSON.parse(
     `[
       {"id":"1","datetime":"2020-03-01%10:10","title":"My First Note"},
       {"id":"2","datetime":"2020-03-02%11:11","title":"My Second Note"},
       {"id":"3","datetime":"2020-03-03%12:12","title":"My Third Note"},
       {"id":"4","datetime":"2020-03-04%13:13","title":"My Fourth Note"}
-    ]`
-  )
+    ]`);
+
+jest.mock('../../../library/NotesData', ()=>({
+  getList : () => {
+    ++getNotesListCount;
+    return(data);
+  }
 }));
 
 
@@ -78,5 +82,19 @@ describe('fsk-notes-list', () => {
 
     expect(spy).toHaveBeenCalled();
     expect(spy.mock.calls[0][0].detail).toBe('1');
+  });
+
+  it('should fetch notes list if closedNote event is received' , async () => {
+    const page = await newSpecPage({
+      components: [FskNotesList],
+      html: `<fsk-notes-list></fsk-notes-list>`,
+    });
+    const countBefore = getNotesListCount;
+    const body : HTMLBodyElement = page.doc.querySelector('body');
+    const closeNoteEvent = new CustomEvent('closedNote');
+    body.dispatchEvent(closeNoteEvent);
+    await page.waitForChanges();
+
+    expect(getNotesListCount).toBe(countBefore+1);
   });
 });
