@@ -38,7 +38,8 @@ describe('NotesData Tests',()=>{
                 );
 
             //Add note 5 and check for results
-            notesData.addNote();
+            const newNoteId = notesData.addNote();
+            expect(newNoteId).toBe(5);
             const actual = notesData.getNote(5);
             actual.id = actual.id.toString(); // enforced id to string
             expect(actual).toEqual(expectedResults);

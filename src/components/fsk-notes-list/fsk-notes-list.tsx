@@ -24,8 +24,8 @@ export class FskNotesList {
    * Listens to closedNote event issued by the note
   */
 
-  @Listen('closedNote',{target:'body'})
-  onCloseNote() {
+  @Listen('savedNote',{target:'body'})
+  onSaveNote() {
     this.notes = [...getList()];
   }
   /** 

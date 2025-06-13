@@ -91,8 +91,8 @@ describe('fsk-notes-list', () => {
     });
     const countBefore = getNotesListCount;
     const body : HTMLBodyElement = page.doc.querySelector('body');
-    const closeNoteEvent = new CustomEvent('closedNote');
-    body.dispatchEvent(closeNoteEvent);
+    const saveNoteEvent = new CustomEvent('savedNote');
+    body.dispatchEvent(saveNoteEvent);
     await page.waitForChanges();
 
     expect(getNotesListCount).toBe(countBefore+1);
