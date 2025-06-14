@@ -86,3 +86,16 @@ export function addNote() : number {
     return (parseInt(newId));
 }
 
+/**
+ * Deletes a note from the list
+ * 
+ * @param id : Id of the note to be deleted
+ */
+
+export function deleteNote(id:number){
+    
+    if(id.toString() in objList){
+        delete objList[id.toString()];
+        delete objText[id.toString()];
+    }
+}

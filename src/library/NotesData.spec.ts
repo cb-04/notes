@@ -49,4 +49,26 @@ describe('NotesData Tests',()=>{
             actual.id = actual.id.toString(); // enforced id to string
             expect(actual).toEqual(expectedResults);
     });
+
+    test('deleteNote should remove the note', () => {
+    
+    jest.spyOn(global.Date, 'now')
+        .mockImplementationOnce(() => 
+            new Date('2020-05-14%11:30').valueOf()
+        );
+    const newNoteId = notesData.addNote(); // id should be 6 now
+
+    let addedNote = notesData.getNote(newNoteId);
+    expect(addedNote.title).toBe('Untitled');
+
+    notesData.deleteNote(newNoteId);
+
+    const deletedNote = notesData.getNote(newNoteId);
+    expect(deletedNote).toEqual({});
+
+    const listAfterDelete = notesData.getList();
+    expect(listAfterDelete.find(note => note.id === newNoteId.toString())).toBeUndefined();
+
+    });
+
 }); 
