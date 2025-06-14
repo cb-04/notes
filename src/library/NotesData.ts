@@ -1,3 +1,12 @@
+import * as Utils from './Utils';
+
+/**
+ * Data library for notes
+ * @packagedocumentation
+ */
+/** 
+ * @ignore
+*/
 
 const list = JSON.parse(
    `[
@@ -8,6 +17,8 @@ const list = JSON.parse(
    ]`
 );
 
+const objList = Utils.array2Obj(list,'id');
+
 const text = JSON.parse(
    `[
    {"id":"1","text":"Text for My First Note"},
@@ -17,12 +28,16 @@ const text = JSON.parse(
    ]`
 );
 
+const objText = Utils.array2Obj(text,'id');
+
 /**
  * Returns list of all notes
  */
 
 export function getList(){
-    return(list);
+    const arrayList = Object.values(objList);
+    const clonedList = JSON.parse(JSON.stringify(arrayList));
+    return(clonedList);
 }
 
 /**
@@ -31,9 +46,11 @@ export function getList(){
  */
 
 export function getNote(id:number){
-    const note = list[id-1];
+    if(!(id.toString() in objList))
+        return({});
+    const note = objList[id.toString()];
     const clonedNote = Object.assign({},note);
-    clonedNote.text = text[id-1].text;
+    clonedNote.text = objText[id.toString()].text;
     return(clonedNote);
 }
 
@@ -45,10 +62,10 @@ export function getNote(id:number){
  */
 
 export function saveNote(id:number, newTitle:string, newText:string){
-    const note = list[id-1];
+    const note = objList[id.toString()];
     note.title = newTitle;
 
-    const noteText = text[id-1];
+    const noteText = objText[id.toString()];
     noteText.text = newText;
 }
 
@@ -57,20 +74,15 @@ export function saveNote(id:number, newTitle:string, newText:string){
  * 
  * @returns id of the new note created
  */
+let idCount = 4;
 export function addNote() : number {
-    const id = list.length + 1;
-    list.push({id:id,datetime:getDateTime(),title:'Untitled'});
-    text.push({id:id, text:''});
-    return (id);
+    const newId = (++idCount).toString();
+    objList[newId] = 
+        {id:newId,
+         datetime:Utils.getDateTime(),
+         title:'Untitled'};
+    
+    objText[newId] = {id:newId, text:''};
+    return (parseInt(newId));
 }
 
-/**
- * Gets current date and time in the ISO format
- * 
- * @returns date time in ISO string format
- */
-
-export function getDateTime():string {
-    const date = new Date(Date.now()); //Using Date.now() to make the code testable
-    return (date.toISOString());
-}
