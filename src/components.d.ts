@@ -49,6 +49,7 @@ declare global {
     interface HTMLFskNoteElementEventMap {
         "closedNote": any;
         "savedNote": any;
+        "deletedNote": any;
     }
     /**
      * Displays a note
@@ -112,6 +113,11 @@ declare namespace LocalJSX {
           * @event
          */
         "onClosedNote"?: (event: FskNoteCustomEvent<any>) => void;
+        /**
+          * Sent when user clicks on Delete button
+          * @event
+         */
+        "onDeletedNote"?: (event: FskNoteCustomEvent<any>) => void;
         /**
           * Sent when user clicks on Save button
           * @event

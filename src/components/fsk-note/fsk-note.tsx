@@ -1,5 +1,5 @@
 import { Component, h, Prop, Event, EventEmitter, Element } from '@stencil/core';
-import {getNote, saveNote} from '../../library/NotesData';
+import {getNote, saveNote, deleteNote} from '../../library/NotesData';
 
 /**
  * Displays a note
@@ -32,6 +32,13 @@ export class FskNote {
 
   @Event() savedNote: EventEmitter;
 
+  /** 
+   * Sent when user clicks on Delete button
+   * @event
+  */
+
+  @Event() deletedNote : EventEmitter;
+
   /**
    * Called from HTML when user clicks on the Close button
    */
@@ -47,6 +54,11 @@ export class FskNote {
 
     this.savedNote.emit();
   }
+  onDeleteNote(){
+    deleteNote(this.noteId);
+    this.deletedNote.emit();
+    this.closedNote.emit();
+  }
 
   render() {
     const note = getNote(this.noteId);
@@ -55,6 +67,7 @@ export class FskNote {
         <div class="fsk-note">
         <header class="fsk-note-header">
           <input id="fsk-note-title"value={note.title}/>
+          <nav id="fsk-note-delete" class="fsk-close-button" onClick={() => this.onDeleteNote()}>Delete</nav>
           <nav id="fsk-note-save" class="fsk-close-button" onClick={() => this.onSaveNote()}>Save</nav>
           <nav id="fsk-note-close" class="fsk-close-button" onClick={() => this.onCloseNote()}>Close</nav>
         </header>

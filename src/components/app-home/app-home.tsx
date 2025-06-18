@@ -39,7 +39,7 @@ export class AppHome {
   render() {
     return(
       <div class="app-home">
-        <button id = "app-home-add-note" onClick={() => this.onAddNote()}>Add Note</button>
+        <button id = "app-home-add-note" onClick={() => this.onAddNote()}>+Add Note</button>
         <fsk-notes-list></fsk-notes-list>
         {this.noteDisplay}
       </div>

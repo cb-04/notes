@@ -21,7 +21,7 @@ describe('app-home tests', () => {
       <app-home>
         <mock:shadow-root>
           <div class="app-home">
-           <button id = "app-home-add-note">Add Note</button>
+           <button id = "app-home-add-note">+Add Note</button>
            <fsk-notes-list></fsk-notes-list>
           </div>
         </mock:shadow-root>
@@ -43,7 +43,7 @@ describe('app-home tests', () => {
 
     expect(page.root.shadowRoot).toEqualHtml(
       `<div class="app-home">
-           <button id = "app-home-add-note">Add Note</button>
+           <button id = "app-home-add-note">+Add Note</button>
            <fsk-notes-list></fsk-notes-list>
            <fsk-note note-id="1"></fsk-note>
       </div>`
@@ -71,7 +71,7 @@ describe('app-home tests', () => {
 
     expect(page.root.shadowRoot).toEqualHtml(
       `<div class="app-home">
-           <button id = "app-home-add-note">Add Note</button>
+           <button id = "app-home-add-note">+Add Note</button>
            <fsk-notes-list></fsk-notes-list>
       </div>`
     );
@@ -93,7 +93,7 @@ describe('app-home tests', () => {
 
     expect(page.root.shadowRoot).toEqualHtml(
       `<div class="app-home">
-           <button id = "app-home-add-note">Add Note</button>
+           <button id = "app-home-add-note">+Add Note</button>
            <fsk-notes-list></fsk-notes-list>
            <fsk-note note-id="5"></fsk-note>
       </div>`

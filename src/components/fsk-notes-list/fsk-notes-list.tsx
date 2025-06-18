@@ -28,6 +28,11 @@ export class FskNotesList {
   onSaveNote() {
     this.notes = [...getList()];
   }
+  @Listen('deletedNote', { target: 'body' })
+  onDeletedNote() {
+    this.notes = [...getList()];  
+  }
+
   /** 
    * Sent when user selects a note by clicking on it
    * @event
