@@ -2,8 +2,9 @@
   "name": "gateway",
   "version": "0.0.1",
   "description": "My Notes App",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
+    "start": "node .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Chandrabali Biswas",
