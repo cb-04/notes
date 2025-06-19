@@ -5,6 +5,9 @@ import { Config } from '@stencil/core';
 export const config: Config = {
   globalStyle: 'src/global/app.css',
   globalScript: 'src/global/app.ts',
+  testing: {
+    testPathIgnorePatterns: ["/node_modules/","/server/"]
+  },
   taskQueue: 'async',
   outputTargets: [
     {
