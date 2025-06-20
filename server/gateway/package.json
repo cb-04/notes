@@ -4,11 +4,11 @@
   "description": "My Notes App",
   "main": "dist/index.js",
   "scripts": {
-    "prebuild": "eslint . --ext .ts --fix --config eslint.config.js",
+    "prebuild": "eslint . --ext .ts --fix",
     "build": "tsc -p tsconfig.build.json",
     "prestart": "npm run build",
     "start": "node .",
-    "start:watch": "nodemon",
+    "start.watch": "nodemon",
     "doc": "typedoc",
     "test": "jest",
     "test.watch": "jest --watch"
@@ -19,11 +19,13 @@
     "express": "^5.1.0"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/jest": "^30.0.0",
     "@types/supertest": "^6.0.3",
     "@typescript-eslint/eslint-plugin": "^8.34.1",
     "@typescript-eslint/parser": "^8.34.1",
+    "cors": "^2.8.5",
     "eslint": "^9.29.0",
     "jest": "^30.0.2",
     "nodemon": "^3.1.10",

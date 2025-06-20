@@ -50,7 +50,7 @@ describe('NotesData Tests',()=>{
             expect(actual).toEqual(expectedResults);
     });
 
-    test('deleteNote should remove the note', () => {
+    test('deleteNote should remove the note', async () => {
     
     jest.spyOn(global.Date, 'now')
         .mockImplementationOnce(() => 
@@ -66,7 +66,7 @@ describe('NotesData Tests',()=>{
     const deletedNote = notesData.getNote(newNoteId);
     expect(deletedNote).toEqual({});
 
-    const listAfterDelete = notesData.getList();
+    const listAfterDelete = await notesData.getList();
     expect(listAfterDelete.find(note => note.id === newNoteId.toString())).toBeUndefined();
 
     });

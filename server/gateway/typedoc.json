@@ -1,5 +1,5 @@
 {
-    "inputFiles": ["./src"],
-    "mode": "module",
-    "out": "doc"
+  "inputFiles": ["./src"],
+  "mode": "modules",
+  "out": "doc"
 }
