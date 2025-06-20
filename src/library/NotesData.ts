@@ -1,4 +1,6 @@
 import * as Utils from './Utils';
+import axios from 'axios';
+axios.defaults.baseURL = 'http://localhost:8080';
 
 /**
  * Data library for notes
@@ -34,7 +36,9 @@ const objText = Utils.array2Obj(text,'id');
  * Returns list of all notes
  */
 
-export function getList(){
+export async function getList(){
+    const gatewayMsg = await axios.get('/');
+    console.log(gatewayMsg);
     const arrayList = Object.values(objList);
     const clonedList = JSON.parse(JSON.stringify(arrayList));
     return(clonedList);

@@ -18,19 +18,30 @@ dayjs.locale('en');
 
 export class FskNotesList {
   /** Note list state variable */
-  @State() notes = getList();
+  @State() notes = [];
+
+  async componentWillLoad() {
+    return getList().then( response => {
+      this.notes = response;
+    });
+  }
 
   /** 
    * Listens to closedNote event issued by the note
   */
 
+  @Listen('closedNote',{ target:'body' })
+  async onCloseNote() {
+    this.notes = await getList();
+  }
+
   @Listen('savedNote',{target:'body'})
-  onSaveNote() {
-    this.notes = [...getList()];
+  async onSaveNote() {
+    this.notes = await getList();
   }
   @Listen('deletedNote', { target: 'body' })
-  onDeletedNote() {
-    this.notes = [...getList()];  
+  async onDeletedNote() {
+    this.notes = await getList();  
   }
 
   /** 
