@@ -18,6 +18,8 @@ describe('app-home', () => {
     const note = await page.find('app-home >>> fsk-note');
     expect(note).toBeNull();
 
+    await page.waitForSelector('app-home >>> fsk-notes-list');
+
     //Click on a note in notes list
     await page.evaluate(() => {
       const appHome = document.querySelector('app-home');
