@@ -13,3 +13,6 @@ app.get('/', (req,res) => {
     res.send('Hello changed world!');
 });
 
+import * as api from './api';
+app.use('/api',api.router);
+

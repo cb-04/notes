@@ -5,6 +5,6 @@ describe('gateway tests', () => {
     it('should say hello', async () => {
         const response = await request(app).get('/');
         expect(response.status).toBe(200);
-        expect(response.text).toBe('Hello world!');
+        expect(response.text).toBe('Hello changed world!');
     });
 });
