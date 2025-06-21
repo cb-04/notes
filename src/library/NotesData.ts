@@ -70,11 +70,19 @@ export async function getNote(id:number){
  */
 
 export function saveNote(id:number, newTitle:string, newText:string){
-    const note = objList[id.toString()];
-    note.title = newTitle;
+    const idStr = id.toString();
 
-    const noteText = objText[id.toString()];
-    noteText.text = newText;
+  // Ensure the note objects exist
+  if (!objList[idStr]) {
+    objList[idStr] = { id: idStr, datetime: new Date().toISOString(), title: '' };
+  }
+
+  if (!objText[idStr]) {
+    objText[idStr] = { id: idStr, text: '' };
+  }
+
+  objList[idStr].title = newTitle;
+  objText[idStr].text = newText;
 }
 
 /**
@@ -83,7 +91,9 @@ export function saveNote(id:number, newTitle:string, newText:string){
  * @returns id of the new note created
  */
 let idCount = 4;
-export function addNote() : number {
+export async function addNote() : Promise<number> {
+    const msg = await axios.post('/api/note/add');
+    console.log(msg.data);
     const newId = (++idCount).toString();
     objList[newId] = 
         {id:newId,

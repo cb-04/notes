@@ -24,9 +24,16 @@ export class FskNote {
 
   /** Fetch note from server before render*/
   async componentWillLoad() {
-    return getNote(this.noteId).then( response => {
-      this.note = response;
-    });
+    if (this.noteId !== undefined && this.noteId !== null) {
+    const response = await getNote(this.noteId);
+    this.note = response;
+    } else {
+    // New note mode: start with blank state
+    this.note = {
+      title: '',
+      text: ''
+    };
+  }
   }
 
   /** Sent when user clicks on Close button
@@ -58,11 +65,16 @@ export class FskNote {
   }
   onSaveNote(){
     const root = this.el.shadowRoot;
-    const title : HTMLInputElement = root.querySelector('#fsk-note-title');
-    const text : HTMLInputElement = root.querySelector('#fsk-note-content');
-    saveNote(this.noteId, title.value, text.value);
+    const title: HTMLInputElement = root.querySelector('#fsk-note-title');
+    const text: HTMLInputElement = root.querySelector('#fsk-note-content');
 
-    this.savedNote.emit();
+    // If it's a new note, generate a new ID
+    if (this.noteId === undefined) {
+      this.noteId = Date.now(); // or use a custom ID generator
+    }
+
+  saveNote(this.noteId, title.value, text.value);
+  this.savedNote.emit();
   }
   onDeleteNote(){
     deleteNote(this.noteId);
@@ -71,20 +83,47 @@ export class FskNote {
   }
 
   render() {
-    return (
-      <div class="note-container animate-open">
-        <div class="fsk-note">
+  const title = this.note?.title || '';
+  const text = this.note?.text || '';
+
+  return (
+    <div class="note-container animate-open">
+      <div class="fsk-note">
         <header class="fsk-note-header">
-          <input id="fsk-note-title"value={this.note.title}/>
-          <nav id="fsk-note-delete" class="fsk-close-button" onClick={() => this.onDeleteNote()}>Delete</nav>
-          <nav id="fsk-note-save" class="fsk-close-button" onClick={() => this.onSaveNote()}>Save</nav>
-          <nav id="fsk-note-close" class="fsk-close-button" onClick={() => this.onCloseNote()}>Close</nav>
+          <input
+            id="fsk-note-title"
+            value={title}
+          />
+          <nav
+            id="fsk-note-delete"
+            class="fsk-close-button"
+            onClick={() => this.onDeleteNote()}
+            style={{ display: this.noteId !== undefined ? 'inline' : 'none' }}
+          >
+            Delete
+          </nav>
+          <nav
+            id="fsk-note-save"
+            class="fsk-close-button"
+            onClick={() => this.onSaveNote()}
+          >
+            Save
+          </nav>
+          <nav
+            id="fsk-note-close"
+            class="fsk-close-button"
+            onClick={() => this.onCloseNote()}
+          >
+            Close
+          </nav>
         </header>
         <textarea id="fsk-note-content">
-          {this.note.text}
+          {text}
         </textarea>
-        </div>
       </div>
-    );
-  }
+    </div>
+  );
+}
+
+
 }

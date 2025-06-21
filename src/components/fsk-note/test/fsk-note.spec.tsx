@@ -29,20 +29,26 @@ describe('fsk-note', () => {
     });
     expect(page.root).toEqualHtml(`
       <fsk-note note-id="1">
-        <mock:shadow-root>
+      <mock:shadow-root>
         <div class="note-container animate-open">
           <div class="fsk-note">
-           <header class="fsk-note-header">
-             <input id="fsk-note-title" value="My First Note"/>
-             <nav id="fsk-note-delete" class="fsk-close-button">Delete</nav>
-             <nav id="fsk-note-save" class="fsk-close-button">Save</nav>
-             <nav id="fsk-note-close" class="fsk-close-button">Close</nav>
-           </header>
-          <textarea id="fsk-note-content">Text for My First Note</textarea>
+            <header class="fsk-note-header">
+              <input id="fsk-note-title" value="My First Note">
+              <nav id="fsk-note-delete" class="fsk-close-button" style="display: inline;">
+                Delete
+              </nav>
+              <nav id="fsk-note-save" class="fsk-close-button">
+                Save
+              </nav>
+              <nav id="fsk-note-close" class="fsk-close-button">
+                Close
+              </nav>
+            </header>
+            <textarea id="fsk-note-content">Text for My First Note</textarea>
           </div>
         </div>
-        </mock:shadow-root>
-      </fsk-note>
+      </mock:shadow-root>
+    </fsk-note>
     `);
   });
 

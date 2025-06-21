@@ -2,7 +2,7 @@ import { newSpecPage } from '@stencil/core/testing';
 
 let addNoteCount = 0;
 jest.mock('../../library/NotesData',()=>({
-  addNote: () => {
+  addNote: async () => {
     ++addNoteCount;
     return(5);
   }
@@ -88,14 +88,17 @@ describe('app-home tests', () => {
     const oldCount = addNoteCount;
     button.click();
     await page.waitForChanges();
+    await page.waitForChanges();
 
+    //check addNote library function was called
     expect(addNoteCount).toBe(oldCount+1);
 
+    //check displayed new note
     expect(page.root.shadowRoot).toEqualHtml(
       `<div class="app-home">
            <button id = "app-home-add-note">+Add Note</button>
            <fsk-notes-list></fsk-notes-list>
-           <fsk-note note-id="5"></fsk-note>
+           <fsk-note></fsk-note>
       </div>`
     );
   });
