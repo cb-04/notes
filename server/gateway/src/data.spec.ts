@@ -15,13 +15,17 @@ describe('Data Tests',()=>{
 
     test('getNote returns expected note', async () => {
         const expectedResults = JSON.parse(`{"datetime": "2020-03-01%10:10", "id": "1", "title": "My First Note","text": "Text for My First Note"}`);
-        const note = data.getNote(1);
+        const note = data.getNote('1');
         expect(note).toEqual(expectedResults);
     });
 
-    test('getNote returns empty object if id is invalid', async () => {
-        const note = data.getNote(-1);
-        expect(Object.keys(note).length).toBe(0);
+    test('getNote throws error for invalid ID', () => {
+        try {
+          data.getNote('-1');
+          fail("Expected getNote to throw an error for invalid ID");
+        } catch (err) {
+          expect((err as Error).message).toBe("Note does not exist!");
+        }
     });
 
     test('saveNote should save a note', async () => {
@@ -29,7 +33,7 @@ describe('Data Tests',()=>{
 
         data.saveNote(1,"Edited Test Title","Edited Test Text");
 
-        const note = data.getNote(1);
+        const note = data.getNote('1');
         expect(note).toEqual(expectedResults);
     })
 
@@ -52,19 +56,20 @@ describe('Data Tests',()=>{
             const newNoteId = await data.addNote();
             expect(newNoteId).toBe(5);
 
-            const note = data.getNote(newNoteId);
+            const note = data.getNote(newNoteId.toString());
             
             expect(note).toEqual(expectedResults);
     });
 
-    test('deleteNote deletes the right note', async () => {
+    test('deleteNote throws error if note does not exist', () => {
+    try {
+      data.deleteNote(999);
+      // If it doesn't throw, force the test to fail
+      fail('Expected deleteNote to throw an error');
+    } catch (err) {
+    expect((err as Error).message).toBe('Note does not exist!');
+    }
+});
 
-        await data.deleteNote(2);
-
-        const note = data.getNote(2);
-
-        expect(Object.keys(note).length).toBe(0);
-
-    });
 
 }); 

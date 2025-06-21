@@ -7,6 +7,11 @@ router.get('/list', (req,res) => {
 });
 
 router.get('/note/:id', (req,res) => {
+    try {
+        res.json(data.getNote(req.params.id));
+    } catch(error) {
+        res.status(404).send(req.params.id);
+    }
     res.send('note:'+req.params.id);
 });
 

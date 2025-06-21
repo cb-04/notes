@@ -41,21 +41,37 @@ export function getList() : unknown{
 }
 
 /**
+ * Converts id to string and checks for validity
+ * @param id id to convert to string
+ * @throws Error if id is not valid
+ */
+
+function getStrId(id: string) : string {
+
+  if(!(id in objList)){
+    throw new Error("Note does not exist!");
+  }else{
+    return id;
+  }
+}
+
+/**
  * Fetches data for a single note
  * @param id : Id of the note to fetch
  */
 
-export function getNote(id: number) : unknown {
-  const idStr = id.toString();
+export function getNote(id: string): unknown {
+  const strId = getStrId(id);
 
-  if (!(idStr in objList)) {
-    return {};
+  if (!(strId in objList)) {
+    throw new Error("Invalid note ID");
   }
 
-  const note = { ...objList[idStr] };
-  note.text = objText[idStr]?.text || '';
+  const note = { ...objList[strId] };
+  note.text = objText[strId]?.text || '';
   return note;
 }
+
 
 
 /**
@@ -115,13 +131,16 @@ export function addNote() : number {
  * @param id : Id of the note to be deleted
  */
 
-export function deleteNote(id:number) : unknown{
-    
-    if(id.toString() in objList){
+export function deleteNote(id: number): unknown {
+  const strId = id.toString();
 
-        delete objList[id.toString()];
-        delete objText[id.toString()];
-    }
+  if (!(strId in objList)) {
+    throw new Error("Note does not exist!");
+  }
 
-    return true;
+  delete objList[strId];
+  delete objText[strId];
+
+  return true;
 }
+
