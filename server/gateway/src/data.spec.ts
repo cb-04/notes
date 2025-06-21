@@ -1,0 +1,70 @@
+
+import * as data from './data';
+
+describe('Data Tests',()=>{
+    const expectedData = JSON.parse(`[
+   {"id":"1","datetime":"2020-03-01%10:10","title":"My First Note"},
+   {"id":"2","datetime":"2020-03-02%11:11","title":"My Second Note"},
+   {"id":"3","datetime":"2020-03-03%12:12","title":"My Third Note"},
+   {"id":"4","datetime":"2020-03-04%13:13","title":"My Fourth Note"}
+]`);
+    test('getList returns expected data', async ()=> {
+        const list = data.getList();
+        expect(list).toEqual(expectedData);
+    });
+
+    test('getNote returns expected note', async () => {
+        const expectedResults = JSON.parse(`{"datetime": "2020-03-01%10:10", "id": "1", "title": "My First Note","text": "Text for My First Note"}`);
+        const note = data.getNote(1);
+        expect(note).toEqual(expectedResults);
+    });
+
+    test('getNote returns empty object if id is invalid', async () => {
+        const note = data.getNote(-1);
+        expect(Object.keys(note).length).toBe(0);
+    });
+
+    test('saveNote should save a note', async () => {
+        const expectedResults = JSON.parse(`{"datetime": "2020-03-01%10:10", "id": "1", "title": "Edited Test Title","text": "Edited Test Text"}`);
+
+        data.saveNote(1,"Edited Test Title","Edited Test Text");
+
+        const note = data.getNote(1);
+        expect(note).toEqual(expectedResults);
+    })
+
+    test('addNode should add a new note', async ()=>{
+        const expectedResults = JSON.parse(`
+            {"id":"5","datetime":"2020-05-14T05:50:00.000Z",
+             "title":"Untitled",
+             "text":""
+            }
+            `);
+
+            //Mock Date.now() to return a fixed testable date-time
+            jest.spyOn(global.Date, 'now')
+                .mockImplementationOnce(() => 
+                    new Date('2020-05-14%11:20').valueOf()
+                );
+
+            //Add note 5 and check for results
+            
+            const newNoteId = await data.addNote();
+            expect(newNoteId).toBe(5);
+
+            const note = data.getNote(newNoteId);
+            
+            expect(note).toEqual(expectedResults);
+    });
+
+    test('deleteNote deletes the right note', async () => {
+
+        await data.deleteNote(2);
+
+        const note = data.getNote(2);
+
+        expect(Object.keys(note).length).toBe(0);
+
+    });
+
+}); 
