@@ -9,15 +9,15 @@ const list = JSON.parse(
    ]`
 );
 
-const saveOut = [];
-const deleteSpy = jest.fn();
+let saveOut = [];
+let deleteId = -1;
 jest.mock('../../../library/NotesData', () => ({
   getNote: async (id:number) => {return list[id-1]},
-  saveNote: (id:number, title:string, text:string) => {
+  saveNote: async (id:number, title:string, text:string) => {
     const saved : {id:number, title:string, text:string} = {id, title, text};
     saveOut.push(saved);
   },
-  deleteNote: deleteSpy,
+  deleteNote: async (id:number) => {deleteId = id;}
 }));
 import { FskNote } from '../fsk-note';
 

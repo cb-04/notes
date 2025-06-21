@@ -63,7 +63,7 @@ export class FskNote {
   onCloseNote(){
     this.closedNote.emit()
   }
-  onSaveNote(){
+  async onSaveNote(){
     const root = this.el.shadowRoot;
     const title: HTMLInputElement = root.querySelector('#fsk-note-title');
     const text: HTMLInputElement = root.querySelector('#fsk-note-content');
@@ -73,11 +73,11 @@ export class FskNote {
       this.noteId = Date.now(); // or use a custom ID generator
     }
 
-  saveNote(this.noteId, title.value, text.value);
+  await saveNote(this.noteId, title.value, text.value);
   this.savedNote.emit();
   }
-  onDeleteNote(){
-    deleteNote(this.noteId);
+  async onDeleteNote(){
+    await deleteNote(this.noteId);
     this.deletedNote.emit();
     this.closedNote.emit();
   }

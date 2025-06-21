@@ -98,7 +98,7 @@ describe('app-home tests', () => {
       `<div class="app-home">
            <button id = "app-home-add-note">+Add Note</button>
            <fsk-notes-list></fsk-notes-list>
-           <fsk-note></fsk-note>
+           <fsk-note note-id="5"></fsk-note>
       </div>`
     );
   });

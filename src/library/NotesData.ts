@@ -49,18 +49,21 @@ export async function getList(){
  * @param id : Id of the note to fetch
  */
 
-export async function getNote(id:number){
-    if(!(id.toString() in objList))
-        return({});
+export async function getNote(id: number) {
+  const idStr = id.toString();
 
-    const gatewayMsg = await axios.get('/api/note/1');
-    console.log(gatewayMsg.data);
+  if (!(idStr in objList)) {
+    return {};
+  }
 
-    const note = objList[id.toString()];
-    const clonedNote = Object.assign({},note);
-    clonedNote.text = objText[id.toString()].text;
-    return(clonedNote);
+  const gatewayMsg = await axios.get(`/api/note/${idStr}`);
+  console.log(gatewayMsg.data);
+
+  const note = { ...objList[idStr] };
+  note.text = objText[idStr]?.text || '';
+  return note;
 }
+
 
 /**
  * Save a note
@@ -69,21 +72,32 @@ export async function getNote(id:number){
  * @param newText Editted text for the note
  */
 
-export function saveNote(id:number, newTitle:string, newText:string){
-    const idStr = id.toString();
+export async function saveNote(id: number, newTitle: string, newText: string) {
+  const msg = await axios.put('/api/note/save/1');
+  console.log(msg.data);
 
-  // Ensure the note objects exist
+  const idStr = id.toString();
+
+  // Ensure note exists (for new note case)
   if (!objList[idStr]) {
-    objList[idStr] = { id: idStr, datetime: new Date().toISOString(), title: '' };
+    objList[idStr] = {
+      id: idStr,
+      datetime: Utils.getDateTime(),
+      title: '',
+    };
   }
 
   if (!objText[idStr]) {
-    objText[idStr] = { id: idStr, text: '' };
+    objText[idStr] = {
+      id: idStr,
+      text: '',
+    };
   }
 
   objList[idStr].title = newTitle;
   objText[idStr].text = newText;
 }
+
 
 /**
  * Adds a blank note to the list
@@ -110,9 +124,13 @@ export async function addNote() : Promise<number> {
  * @param id : Id of the note to be deleted
  */
 
-export function deleteNote(id:number){
+export async function deleteNote(id:number){
     
     if(id.toString() in objList){
+
+        const msg = await axios.delete('/api/note/1');
+        console.log(msg.data);
+
         delete objList[id.toString()];
         delete objText[id.toString()];
     }

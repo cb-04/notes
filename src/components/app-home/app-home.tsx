@@ -32,8 +32,8 @@ export class AppHome {
    * Event handler for addNote button press
    */
   async onAddNote(){
-    const noteId = addNote();
-    this.noteDisplay = <fsk-note note-id={noteId}></fsk-note>
+    const noteId = await addNote(); 
+    this.noteDisplay = <fsk-note note-id={noteId}></fsk-note>; 
   }
 
   render() {
