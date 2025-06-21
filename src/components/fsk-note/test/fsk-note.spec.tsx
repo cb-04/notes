@@ -12,7 +12,7 @@ const list = JSON.parse(
 const saveOut = [];
 const deleteSpy = jest.fn();
 jest.mock('../../../library/NotesData', () => ({
-  getNote: (id:number) => {return list[id-1]},
+  getNote: async (id:number) => {return list[id-1]},
   saveNote: (id:number, title:string, text:string) => {
     const saved : {id:number, title:string, text:string} = {id, title, text};
     saveOut.push(saved);

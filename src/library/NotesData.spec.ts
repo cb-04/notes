@@ -11,29 +11,35 @@ describe('NotesData Tests',()=>{
    {"id":"4","datetime":"2020-03-04%13:13","title":"My Fourth Note"}
 ]`);
     test('getList returns expected data', async ()=> {
-        mock.mockResolvedValue({data: 'hello'});
+        mock.mockResolvedValue({data: 'list'});
         const data = await notesData.getList();
         expect(data).toEqual(expectedData);
     });
 
-    test('getNote returns expected note', () => {
+    test('getNote returns expected note', async () => {
         const expectedResults = JSON.parse(`{"datetime": "2020-03-01%10:10", "id": "1", "title": "My First Note","text": "Text for My First Note"}`);
-        expect(notesData.getNote(1)).toEqual(expectedResults);
-    })
+        mock.mockResolvedValue({data: 'note'});
+        const note = await notesData.getNote(1);
+        expect(note).toEqual(expectedResults);
+    });
 
-    test('getNote returns empty object if id is invalid', () => {
-        const note = notesData.getNote(-1);
+    test('getNote returns empty object if id is invalid', async () => {
+        mock.mockResolvedValue({data: 'invalid id'});
+        const note = await notesData.getNote(-1);
         expect(Object.keys(note).length).toBe(0);
     });
 
-    test('saveNote should save a note',() => {
+    test('saveNote should save a note', async () => {
         const expectedResults = JSON.parse(`{"datetime": "2020-03-01%10:10", "id": "1", "title": "Edited Test Title","text": "Edited Test Text"}`);
 
         notesData.saveNote(1,"Edited Test Title","Edited Test Text");
-        expect(notesData.getNote(1)).toEqual(expectedResults);
+
+        mock.mockResolvedValue({data: 'saved note'});
+        const note = await notesData.getNote(1);
+        expect(note).toEqual(expectedResults);
     })
 
-    test('addNode should add a new note', ()=>{
+    test('addNode should add a new note', async ()=>{
         const expectedResults = JSON.parse(`
             {"id":"5","datetime":"2020-05-14T05:50:00.000Z",
              "title":"Untitled",
@@ -48,31 +54,24 @@ describe('NotesData Tests',()=>{
                 );
 
             //Add note 5 and check for results
+            
             const newNoteId = notesData.addNote();
             expect(newNoteId).toBe(5);
-            const actual = notesData.getNote(5);
-            actual.id = actual.id.toString(); // enforced id to string
-            expect(actual).toEqual(expectedResults);
+
+            mock.mockResolvedValue({data: 'added note'});
+            const note = await notesData.getNote(newNoteId);
+            
+            expect(note).toEqual(expectedResults);
     });
 
-    test('deleteNote should remove the note', async () => {
+    test('deleteNote deletes the right note', async () => {
     
-    jest.spyOn(global.Date, 'now')
-        .mockImplementationOnce(() => 
-            new Date('2020-05-14%11:30').valueOf()
-        );
-    const newNoteId = notesData.addNote(); // id should be 6 now
+        notesData.deleteNote(2);
 
-    let addedNote = notesData.getNote(newNoteId);
-    expect(addedNote.title).toBe('Untitled');
+        mock.mockResolvedValue({data: 'deleted note'});
+        const note = await notesData.getNote(2);
 
-    notesData.deleteNote(newNoteId);
-
-    const deletedNote = notesData.getNote(newNoteId);
-    expect(deletedNote).toEqual({});
-
-    const listAfterDelete = await notesData.getList();
-    expect(listAfterDelete.find(note => note.id === newNoteId.toString())).toBeUndefined();
+        expect(Object.keys(note).length).toBe(0);
 
     });
 

@@ -37,8 +37,8 @@ const objText = Utils.array2Obj(text,'id');
  */
 
 export async function getList(){
-    const gatewayMsg = await axios.get('/');
-    //console.log(gatewayMsg.data);
+    const gatewayMsg = await axios.get('/api/list');
+    console.log(gatewayMsg.data);
     const arrayList = Object.values(objList);
     const clonedList = JSON.parse(JSON.stringify(arrayList));
     return(clonedList);
@@ -49,9 +49,13 @@ export async function getList(){
  * @param id : Id of the note to fetch
  */
 
-export function getNote(id:number){
+export async function getNote(id:number){
     if(!(id.toString() in objList))
         return({});
+
+    const gatewayMsg = await axios.get('/api/note/1');
+    console.log(gatewayMsg.data);
+
     const note = objList[id.toString()];
     const clonedNote = Object.assign({},note);
     clonedNote.text = objText[id.toString()].text;

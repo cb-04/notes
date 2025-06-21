@@ -1,4 +1,4 @@
-import { Component, h, Prop, Event, EventEmitter, Element } from '@stencil/core';
+import { Component, h, Prop, Event, EventEmitter, Element, State } from '@stencil/core';
 import {getNote, saveNote, deleteNote} from '../../library/NotesData';
 
 /**
@@ -18,6 +18,16 @@ export class FskNote {
    * HTML property note-id: id of the note to display
   */
   @Prop() noteId: number;
+
+  /** Note to render*/
+  @State() note : any;
+
+  /** Fetch note from server before render*/
+  async componentWillLoad() {
+    return getNote(this.noteId).then( response => {
+      this.note = response;
+    });
+  }
 
   /** Sent when user clicks on Close button
    * @event 
@@ -61,18 +71,17 @@ export class FskNote {
   }
 
   render() {
-    const note = getNote(this.noteId);
     return (
       <div class="note-container animate-open">
         <div class="fsk-note">
         <header class="fsk-note-header">
-          <input id="fsk-note-title"value={note.title}/>
+          <input id="fsk-note-title"value={this.note.title}/>
           <nav id="fsk-note-delete" class="fsk-close-button" onClick={() => this.onDeleteNote()}>Delete</nav>
           <nav id="fsk-note-save" class="fsk-close-button" onClick={() => this.onSaveNote()}>Save</nav>
           <nav id="fsk-note-close" class="fsk-close-button" onClick={() => this.onCloseNote()}>Close</nav>
         </header>
         <textarea id="fsk-note-content">
-          {note.text}
+          {this.note.text}
         </textarea>
         </div>
       </div>
