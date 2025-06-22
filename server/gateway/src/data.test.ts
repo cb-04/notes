@@ -60,14 +60,30 @@ describe('Data Tests',()=>{
     });
 
     test('deleteNote throws error if note does not exist', () => {
-    try {
-      data.deleteNote('999');
-      // If it doesn't throw, force the test to fail
-      fail('Expected deleteNote to throw an error');
-    } catch (err) {
-    expect((err as Error).message).toBe('Note does not exist!');
-    }
-});
+        try {
+          data.deleteNote('999');
+          // If it doesn't throw, force the test to fail
+          fail('Expected deleteNote to throw an error');
+        } catch (err) {
+        expect((err as Error).message).toBe('Note does not exist!');
+        }
+    });
 
+    test('reset sets data back to defaults', () => {
+        //Change the data
+        data.addNote();
 
+        //Check the data is not as expected
+        const list = data.getList();
+        expect(list).not.toEqual(expectedData);
+        const id = data.addNote();
+        expect(id).not.toEqual('5');
+
+        //Reset data and check it matches defaults
+        data.reset();
+        const resetList = data.getList();
+        expect(resetList).toEqual(expectedData);
+        const resetId = data.addNote();
+        expect(resetId).toEqual('5');
+    });
 }); 
