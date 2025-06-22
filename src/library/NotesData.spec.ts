@@ -11,7 +11,7 @@ describe('NotesData Tests',()=>{
    {"id":"4","datetime":"2020-03-04%13:13","title":"My Fourth Note"}
 ]`);
     test('getList returns expected data', async ()=> {
-        mock.mockResolvedValue({data: 'list'});
+        mock.mockResolvedValue({data: expectedData});
         const data = await notesData.getList();
         expect(data).toEqual(expectedData);
     });
@@ -42,7 +42,7 @@ describe('NotesData Tests',()=>{
         expect(note).toEqual(expectedResults);
     })
 
-    test('addNode should add a new note', async ()=>{
+    test('addNote should add a new note', async ()=>{
         const expectedResults = JSON.parse(`
             {"id":"5","datetime":"2020-05-14T05:50:00.000Z",
              "title":"Untitled",

@@ -37,11 +37,8 @@ const objText = Utils.array2Obj(text,'id');
  */
 
 export async function getList(){
-    const gatewayMsg = await axios.get('/api/list');
-    console.log(gatewayMsg.data);
-    const arrayList = Object.values(objList);
-    const clonedList = JSON.parse(JSON.stringify(arrayList));
-    return(clonedList);
+    const response = await axios.get('/api/list');
+    return(response.data);
 }
 
 /**
