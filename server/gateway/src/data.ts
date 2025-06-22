@@ -81,30 +81,28 @@ export function getNote(id: string): unknown {
  * @param newText Editted text for the note
  */
 
-export function saveNote(id: number, newTitle: string, newText: string) : unknown{
-
-  const idStr = id.toString();
+export function saveNote(id: string, newTitle: string, newText: string) : string {
 
   // Ensure note exists (for new note case)
-  if (!objList[idStr]) {
-    objList[idStr] = {
-      id: idStr,
+  if (!objList[id]) {
+    objList[id] = {
+      id: id,
       datetime: Utils.getDateTime(),
       title: '',
     };
   }
 
-  if (!objText[idStr]) {
-    objText[idStr] = {
-      id: idStr,
+  if (!objText[id]) {
+    objText[id] = {
+      id: id,
       text: '',
     };
   }
 
-  objList[idStr].title = newTitle;
-  objText[idStr].text = newText;
+  objList[id].title = newTitle;
+  objText[id].text = newText;
 
-  return true;
+  return id;
 }
 
 

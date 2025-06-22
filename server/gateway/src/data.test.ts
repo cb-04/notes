@@ -31,7 +31,7 @@ describe('Data Tests',()=>{
     test('saveNote should save a note', async () => {
         const expectedResults = JSON.parse(`{"datetime": "2020-03-01%10:10", "id": "1", "title": "Edited Test Title","text": "Edited Test Text"}`);
 
-        data.saveNote(1,"Edited Test Title","Edited Test Text");
+        data.saveNote('1',"Edited Test Title","Edited Test Text");
 
         const note = data.getNote('1');
         expect(note).toEqual(expectedResults);
