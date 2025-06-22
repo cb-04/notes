@@ -18,15 +18,9 @@ describe('NotesData Tests',()=>{
 
     test('getNote returns expected note', async () => {
         const expectedResults = JSON.parse(`{"datetime": "2020-03-01%10:10", "id": "1", "title": "My First Note","text": "Text for My First Note"}`);
-        mock.mockResolvedValue({data: 'note'});
+        mock.mockResolvedValue({data: expectedResults});
         const note = await notesData.getNote(1);
         expect(note).toEqual(expectedResults);
-    });
-
-    test('getNote returns empty object if id is invalid', async () => {
-        mock.mockResolvedValue({data: 'invalid id'});
-        const note = await notesData.getNote(-1);
-        expect(Object.keys(note).length).toBe(0);
     });
 
     test('saveNote should save a note', async () => {
@@ -43,45 +37,25 @@ describe('NotesData Tests',()=>{
     })
 
     test('addNote should add a new note', async ()=>{
-        const expectedResults = JSON.parse(`
-            {"id":"5","datetime":"2020-05-14T05:50:00.000Z",
-             "title":"Untitled",
-             "text":""
-            }
-            `);
-
-            //Mock Date.now() to return a fixed testable date-time
-            jest.spyOn(global.Date, 'now')
-                .mockImplementationOnce(() => 
-                    new Date('2020-05-14%11:20').valueOf()
-                );
 
             //Mock axios.post
             const postMock = jest.spyOn(axios, 'post');
-            postMock.mockResolvedValue({data: 'added note'});
+            postMock.mockResolvedValue({data: '5'});
 
             //Add note 5 and check for results
             
             const newNoteId = await notesData.addNote();
             expect(newNoteId).toBe(5);
-
-            mock.mockResolvedValue({data: 'added note'});
-            const note = await notesData.getNote(newNoteId);
-            
-            expect(note).toEqual(expectedResults);
     });
 
     test('deleteNote deletes the right note', async () => {
 
         const deleteMock = jest.spyOn(axios,'delete');
-        deleteMock.mockResolvedValue({data: 'deleteMock'});
+        deleteMock.mockResolvedValue({data: '2'});
     
-        await notesData.deleteNote(2);
+        const noteId = await notesData.deleteNote(2);
 
-        mock.mockResolvedValue({data: 'deleted note'});
-        const note = await notesData.getNote(2);
-
-        expect(Object.keys(note).length).toBe(0);
+        expect(noteId).toBe(2);
 
     });
 

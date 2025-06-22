@@ -47,18 +47,9 @@ export async function getList(){
  */
 
 export async function getNote(id: number) {
-  const idStr = id.toString();
 
-  if (!(idStr in objList)) {
-    return {};
-  }
-
-  const gatewayMsg = await axios.get(`/api/note/${idStr}`);
-  console.log(gatewayMsg.data);
-
-  const note = { ...objList[idStr] };
-  note.text = objText[idStr]?.text || '';
-  return note;
+  const response = await axios.get('/api/note/'+id);
+  return (response.data);
 }
 
 
@@ -101,18 +92,9 @@ export async function saveNote(id: number, newTitle: string, newText: string) {
  * 
  * @returns id of the new note created
  */
-let idCount = 4;
 export async function addNote() : Promise<number> {
-    const msg = await axios.post('/api/note/add');
-    console.log(msg.data);
-    const newId = (++idCount).toString();
-    objList[newId] = 
-        {id:newId,
-         datetime:Utils.getDateTime(),
-         title:'Untitled'};
-    
-    objText[newId] = {id:newId, text:''};
-    return (parseInt(newId));
+    const response = await axios.post('/api/note/add');
+    return (parseInt(response.data));
 }
 
 /**
@@ -121,14 +103,7 @@ export async function addNote() : Promise<number> {
  * @param id : Id of the note to be deleted
  */
 
-export async function deleteNote(id:number){
-    
-    if(id.toString() in objList){
-
-        const msg = await axios.delete('/api/note/1');
-        console.log(msg.data);
-
-        delete objList[id.toString()];
-        delete objText[id.toString()];
-    }
+export async function deleteNote(id:number) : Promise<number> {
+  const response = await axios.delete('/api/note/'+id);
+  return( parseInt(response.data) );
 }
