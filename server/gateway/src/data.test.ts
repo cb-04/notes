@@ -46,15 +46,13 @@ describe('Data Tests',()=>{
             `);
 
             //Mock Date.now() to return a fixed testable date-time
-            jest.spyOn(global.Date, 'now')
-                .mockImplementationOnce(() => 
-                    new Date('2020-05-14%11:20').valueOf()
-                );
+            jest.spyOn(global.Date, 'now').mockReturnValue(new Date('2020-05-14T05:50:00Z').getTime());
+
 
             //Add note 5 and check for results
             
             const newNoteId = await data.addNote();
-            expect(newNoteId).toBe(5);
+            expect(newNoteId).toBe('5');
 
             const note = data.getNote(newNoteId.toString());
             

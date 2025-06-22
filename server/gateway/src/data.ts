@@ -114,7 +114,7 @@ export function saveNote(id: number, newTitle: string, newText: string) : unknow
  * @returns id of the new note created
  */
 let idCount = 4;
-export function addNote() : number {
+export function addNote() : string {
     const newId = (++idCount).toString();
     objList[newId] = 
         {id:newId,
@@ -122,7 +122,7 @@ export function addNote() : number {
          title:'Untitled'};
     
     objText[newId] = {id:newId, text:''};
-    return (parseInt(newId));
+    return (newId);
 }
 
 /**
