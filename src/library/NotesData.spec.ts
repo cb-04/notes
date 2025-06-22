@@ -1,5 +1,5 @@
 import axios from 'axios';
-const mock = jest.spyOn(axios,'get');
+const getMock = jest.spyOn(axios,'get');
 
 import * as notesData from './NotesData';
 
@@ -11,16 +11,19 @@ describe('NotesData Tests',()=>{
    {"id":"4","datetime":"2020-03-04%13:13","title":"My Fourth Note"}
 ]`);
     test('getList returns expected data', async ()=> {
-        mock.mockResolvedValue({data: expectedData});
+        getMock.mockResolvedValue({data: expectedData});
         const data = await notesData.getList();
         expect(data).toEqual(expectedData);
+        expect(getMock).toHaveBeenCalledWith('/api/list');
     });
 
     test('getNote returns expected note', async () => {
         const expectedResults = JSON.parse(`{"datetime": "2020-03-01%10:10", "id": "1", "title": "My First Note","text": "Text for My First Note"}`);
-        mock.mockResolvedValue({data: expectedResults});
+        getMock.mockClear();
+        getMock.mockResolvedValue({data: expectedResults});
         const note = await notesData.getNote(1);
         expect(note).toEqual(expectedResults);
+        expect(getMock).toHaveBeenCalledWith('/api/note/1');
     });
 
     test('saveNote should save a note', async () => {
@@ -31,6 +34,11 @@ describe('NotesData Tests',()=>{
         const saveReturn = await notesData.saveNote(1,"Edited Test Title","Edited Test Text");
 
         expect(saveReturn).toBe(1);
+        expect(putMock).toHaveBeenCalledWith(
+            '/api/note/save/1',
+            {title: 'Edited Test Title', text: 'Edited Test Text'},
+            { 'headers': {'Content-Type':'application/json'} }
+        );
     })
 
     test('addNote should add a new note', async ()=>{
@@ -43,6 +51,7 @@ describe('NotesData Tests',()=>{
             
             const newNoteId = await notesData.addNote();
             expect(newNoteId).toBe(5);
+            expect(postMock).toHaveBeenCalledWith('/api/note/add');
     });
 
     test('deleteNote deletes the right note', async () => {
@@ -53,7 +62,7 @@ describe('NotesData Tests',()=>{
         const noteId = await notesData.deleteNote(2);
 
         expect(noteId).toBe(2);
-
+        expect(deleteMock).toHaveBeenCalledWith('/api/note/2');
     });
 
 }); 
