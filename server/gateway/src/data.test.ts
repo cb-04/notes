@@ -63,7 +63,7 @@ describe('Data Tests',()=>{
 
     test('deleteNote throws error if note does not exist', () => {
     try {
-      data.deleteNote(999);
+      data.deleteNote('999');
       // If it doesn't throw, force the test to fail
       fail('Expected deleteNote to throw an error');
     } catch (err) {

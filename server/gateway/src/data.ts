@@ -46,7 +46,7 @@ export function getList() : unknown{
  * @throws Error if id is not valid
  */
 
-function getStrId(id: string) : string {
+function getCheckedId(id: string) : string {
 
   if(!(id in objList)){
     throw new Error("Note does not exist!");
@@ -61,7 +61,7 @@ function getStrId(id: string) : string {
  */
 
 export function getNote(id: string): unknown {
-  const strId = getStrId(id);
+  const strId = getCheckedId(id);
 
   if (!(strId in objList)) {
     throw new Error("Invalid note ID");
@@ -131,16 +131,16 @@ export function addNote() : number {
  * @param id : Id of the note to be deleted
  */
 
-export function deleteNote(id: number): unknown {
-  const strId = id.toString();
+export function deleteNote(id: string): string {
+  const checkedId = getCheckedId(id);
 
-  if (!(strId in objList)) {
+  if (!(checkedId in objList)) {
     throw new Error("Note does not exist!");
   }
 
-  delete objList[strId];
-  delete objText[strId];
+  delete objList[checkedId];
+  delete objText[checkedId];
 
-  return true;
+  return checkedId;
 }
 
