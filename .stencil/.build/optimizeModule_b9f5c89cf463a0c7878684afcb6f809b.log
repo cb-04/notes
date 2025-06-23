@@ -1,0 +1,1 @@
+import{a as o}from"./p-1a234395.js";const s=async()=>{o.defaults.baseURL="http://localhost:8080"};const t=s;export{t as g};
