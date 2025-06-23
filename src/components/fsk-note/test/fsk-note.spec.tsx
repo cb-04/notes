@@ -97,20 +97,20 @@ describe('fsk-note', () => {
   });
 
   it('should delete note when delete button is clicked', async () => {
-    const page = await newSpecPage({
-      components: [FskNote],
-      html: `<fsk-note note-id="1"></fsk-note>`,
-    });
-
-    const deleteEvent = jest.fn();
-    page.root.addEventListener('deletedNote', deleteEvent);
-
-    const deleteBtn: HTMLElement = page.root.shadowRoot.querySelector('#fsk-note-delete');
-    deleteBtn.click();
-    await page.waitForChanges();
-    
-    expect(deleteEvent).toHaveBeenCalled();
+  const page = await newSpecPage({
+    components: [FskNote],
+    html: `<fsk-note note-id="1"></fsk-note>`,
   });
 
+  const deleteEvent = jest.fn();
+  page.root.addEventListener('deletedNote', deleteEvent);
+
+  const deleteBtn: HTMLElement = page.root.shadowRoot.querySelector('#fsk-note-delete');
+  deleteBtn.click();
+  await page.waitForChanges();
+  
+  expect(deleteEvent).toHaveBeenCalled();
+  expect(deleteId).toBe(1);
+  });
 
 });

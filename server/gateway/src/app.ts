@@ -6,13 +6,11 @@ export const app = express();
 
 app.use(express.json());
 
-app.use(cors());
-//app.options('/*', cors());
+//Default path serves web pages
+app.use(express.static('dist/www'));
 
-app.get('/', (req,res) => {
-    console.log('get /');
-    res.send('Hello changed world!');
-});
+app.use(cors());
+
 
 import * as api from './api';
 app.use('/api',api.router);
