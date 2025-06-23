@@ -12,7 +12,7 @@ router.get('/note/:id', (req,res) => {
     } catch(error) {
         res.status(404).send(req.params.id);
     }
-    res.send('note:'+req.params.id);
+    //res.send('note:'+req.params.id);
 });
 
 router.post('/note/add', (req,res) => {
