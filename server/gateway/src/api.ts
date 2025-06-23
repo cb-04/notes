@@ -12,7 +12,6 @@ router.get('/note/:id', (req,res) => {
     } catch(error) {
         res.status(404).send(req.params.id);
     }
-    //res.send('note:'+req.params.id);
 });
 
 router.post('/note/add', (req,res) => {
@@ -21,8 +20,12 @@ router.post('/note/add', (req,res) => {
 });
 
 router.put('/note/save/:id', (req,res) => {
-    const id = data.saveNote(req.params.id, req.body.title, req.body.text);
-    res.send(id);
+    try {
+      const id = data.saveNote(req.params.id, req.body.title, req.body.text);
+      res.send(id);
+    } catch(error) {
+        res.status(404).send(req.params.id);
+    }
 });
 
 router.delete('/note/:id', (req,res) => {

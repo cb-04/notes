@@ -35,7 +35,16 @@ describe('Data Tests',()=>{
 
         const note = data.getNote('1');
         expect(note).toEqual(expectedResults);
-    })
+    });
+
+    test('saveNote throws error for invalid ID', () => {
+        try {
+          data.saveNote('-1', 'a', 'a');
+          fail("Expected saveNote to throw an error for invalid ID");
+        } catch (err) {
+          expect((err as Error).message).toBe("Invalid note ID!");
+        }
+    });
 
     test('addNode should add a new note', async ()=>{
         const expectedResults = JSON.parse(`

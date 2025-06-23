@@ -82,20 +82,8 @@ export function getNote(id: string): unknown {
 
 export function saveNote(id: string, newTitle: string, newText: string) : string {
 
-  // Ensure note exists (for new note case)
-  if (!objList[id]) {
-    objList[id] = {
-      id: id,
-      datetime: Utils.getDateTime(),
-      title: '',
-    };
-  }
-
-  if (!objText[id]) {
-    objText[id] = {
-      id: id,
-      text: '',
-    };
+  if (!id || !(id in objList) || !(id in objText)) {
+    throw new Error(`Invalid note ID!`);
   }
 
   objList[id].title = newTitle;
