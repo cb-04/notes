@@ -4,19 +4,20 @@
   "description": "My Notes App",
   "main": "dist/index.js",
   "scripts": {
-  "clean": "rm -rf dist",
-  "prebuild": "npm run clean && eslint . --ext .ts --fix",
-  "build": "tsc -p tsconfig.build.json && cp -r ../../www dist/www",
-  "prestart": "npm run build",
-  "start": "node .",
-  "start.watch": "nodemon",
-  "doc": "typedoc",
-  "test": "jest",
-  "test.watch": "jest --watch"
-},
+    "clean": "rm -rf dist",
+    "prebuild": "npm run clean && eslint . --ext .ts --fix",
+    "build": "tsc -p tsconfig.build.json && cp -r ../../www dist/www",
+    "prestart": "npm run build",
+    "start": "node .",
+    "start.watch": "nodemon",
+    "doc": "typedoc",
+    "test": "jest",
+    "test.watch": "jest --watch"
+  },
   "author": "Chandrabali Biswas",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.10.0",
     "express": "^5.1.0"
   },
   "devDependencies": {
