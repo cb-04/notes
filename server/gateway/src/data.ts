@@ -33,12 +33,25 @@ const objText = Utils.array2Obj(text,'id');
 
 /**
  * Returns list of all notes
+ * 
+ * @returns array of noteListItem
  */
 
-export function getList() : unknown{
-    const arrayList = Object.values(objList);
-    const clonedList = JSON.parse(JSON.stringify(arrayList));
-    return(clonedList);
+export interface noteListItem {
+  id: string,
+  datetime: number,
+  title: string
+}
+export async function getList() : Promise<noteListItem[]> {
+  const response = await db.send({
+    "operation":"sql",
+    "sql":`
+      SELECT id,__createdtime__ AS datetime,title
+      FROM notes.notes
+      ORDER BY datetime
+    `
+  });
+  return(<noteListItem[]>response);
 }
 
 /**
@@ -61,16 +74,26 @@ function getCheckedId(id: string) : string {
  * @param id : Id of the note to fetch
  */
 
-export function getNote(id: string): unknown {
-  const strId = getCheckedId(id);
-
-  if (!(strId in objList)) {
-    throw new Error("Invalid note ID");
-  }
-
-  const note = { ...objList[strId] };
-  note.text = objText[strId]?.text || '';
-  return note;
+export interface note {
+  id: string,
+  datetime: number,
+  title: string,
+  text: string
+}
+export async function getNote(id: string) : Promise<note> {
+  const response = <note[]> await db.send({
+    "operation":"sql",
+    "sql":`
+      SELECT id,__createdtime__ AS datetime,title,text
+      FROM notes.notes
+      WHERE id='${id}'
+    `
+  });
+  //console.log(`getNote( ${id} ) response:\n`+JSON.stringify(response,null,2));
+  if(response.length == 0)
+    throw new Error('No such note!');
+  else
+    return(response[0]);
 }
 
 
@@ -133,29 +156,28 @@ export function deleteNote(id: string): string {
 
 /** Resets dummy data to known state */
 const dbResetData = JSON.parse(`[
-    {"title":"My First Note","text":"Text for My First Note"},
-    {"title":"My Second Note","text":"Text for My Second Note"},
-    {"title":"My Third Note","text":"Text for My Third Note"},
-    {"title":"My Fourth Note","text":"Text for My Fourth Note"} 
+    {"id":"1","title":"My First Note","text":"Text for My First Note"},
+    {"id":"2","title":"My Second Note","text":"Text for My Second Note"},
+    {"id":"3","title":"My Third Note","text":"Text for My Third Note"},
+    {"id":"4","title":"My Fourth Note","text":"Text for My Fourth Note"} 
   ]`);
 
-export async function reset() : Promise<void> {
-  // Delete all records in notes table
-  let response = await db.send({
-    "operation":"sql",
-    "sql":"DELETE FROM notes.notes"
+export async function reset(): Promise<void> {
+  console.log("Resetting DB...");
+  await db.send({
+    operation: "sql",
+    sql: "DELETE FROM notes.notes"
   });
-  console.log(response);
 
-  // Add test records
-  for(let i=0; i<dbResetData.length; ++i) {
-    response = await db.send({
-      "operation":"sql",
-      "sql":`
-        INSERT INTO notes.notes (title,text)
-        VALUES('${dbResetData[i].title}','${dbResetData[i].text}')
-      `
+  for (let i = 0; i < dbResetData.length; ++i) {
+    const { id, title, text } = dbResetData[i];
+    const insertSQL = `
+      INSERT INTO notes.notes (id, title, text)
+      VALUES('${id}', '${title}', '${text}')
+    `;
+    const response = await db.send({
+      operation: "sql",
+      sql: insertSQL
     });
-    console.log(response);
   }
 }

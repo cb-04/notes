@@ -2,6 +2,10 @@
 import * as data from './data';
 
 describe('Data Tests',()=>{
+  beforeEach(async () => {
+  await data.reset();
+});
+
     const expectedData = JSON.parse(`[
    {"title":"My First Note"},
    {"title":"My Second Note"},
@@ -15,20 +19,22 @@ describe('Data Tests',()=>{
       expect(list[i].title).toBe(expectedData[i].title);
   });
 
-    test.skip('getNote returns expected note', async () => {
-        const expectedResults = JSON.parse(`{"datetime": "2020-03-01%10:10", "id": "1", "title": "My First Note","text": "Text for My First Note"}`);
-        const note = data.getNote('1');
-        expect(note).toEqual(expectedResults);
-    });
+  test('getNote returns expected note', async () => {
+    const expectedResults = JSON.parse(`
+      {"title": "My First Note",
+       "text":"Text for My First Note"}
+    `);
+    const list = await data.getList();
+    const note = await data.getNote(list[0].id);
+    expect(note.id).toBe(list[0].id);
+    expect(note.datetime).toBe(list[0].datetime);
+    expect(note.title).toBe(expectedResults.title);
+    expect(note.text).toBe(expectedResults.text);
+  });
 
-    test.skip('getNote throws error for invalid ID', () => {
-        try {
-          data.getNote('-1');
-          fail("Expected getNote to throw an error for invalid ID");
-        } catch (err) {
-          expect((err as Error).message).toBe("Note does not exist!");
-        }
-    });
+    test('getNote returns throws error if id is invalid', async () => {
+    await expect(data.getNote('-1')).rejects.toThrow('No such note!');
+  });
 
     test.skip('saveNote should save a note', async () => {
         const expectedResults = JSON.parse(`{"datetime": "2020-03-01%10:10", "id": "1", "title": "Edited Test Title","text": "Edited Test Text"}`);
