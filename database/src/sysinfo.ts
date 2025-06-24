@@ -1,28 +1,28 @@
 import axios from 'axios';
 
 /** sysinfo from HarperDB */
-console.log('hello database!');
+console.log('hello database');
 
-//Setup DB parameters
+// Set up DB parameters
 const username = 'HDB_ADMIN';
 const password = 'password';
 const url = 'http://localhost:9925';
 
-//Setup database script
+// Set up database script
 const dbScript = {
-    "operation":"system_information"
+  "operation":"system_information"
 }
 
-//Setup http configuration
+// Set up http configuration
 const httpConfig = {
-    headers: {
-        "Content-Type":"application/json",
-        "authorization":"Basic "
-           + Buffer.from(username + ':' + password).toString('base64'),
-        "cache-control":"no-cache"
-    }
-}
+  headers: {
+    "Content-Type":"application/json",
+    "authorization": "Basic "
+      + Buffer.from(username + ':' + password).toString('base64'),
+    "cache-control":"no-cache"
+  }
+};
 
-//Call the database
+// Call the database
 axios.post(url, dbScript, httpConfig)
-  .then( (response) => { console.log(response.data); } )
+  .then( (response) => { console.log(response.data); });
