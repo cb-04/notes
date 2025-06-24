@@ -5,6 +5,9 @@ describe('Data Tests',()=>{
   beforeEach(async () => {
   await data.reset();
 });
+  afterAll(async () => {
+    await data.reset();
+  });
 
     const expectedData = JSON.parse(`[
    {"title":"My First Note"},
@@ -36,65 +39,62 @@ describe('Data Tests',()=>{
     await expect(data.getNote('-1')).rejects.toThrow('No such note!');
   });
 
-    test.skip('saveNote should save a note', async () => {
-        const expectedResults = JSON.parse(`{"datetime": "2020-03-01%10:10", "id": "1", "title": "Edited Test Title","text": "Edited Test Text"}`);
+    test('saveNote should save a note', async () => {
+        const expectedResults = JSON.parse(`{"title": "Edited Test Title","text": "Edited Test Text"}`);
 
-        data.saveNote('1',"Edited Test Title","Edited Test Text");
+        //Get list to get the note id
+        const list = await data.getList();
 
-        const note = data.getNote('1');
-        expect(note).toEqual(expectedResults);
+        //save note and check response is correct
+        const id = await data.saveNote(
+          list[1].id,"Edited Test Title","Edited Test Text");
+        expect(id).toBe(list[1].id);
+
+        //Get the note to check it saved
+
+        const note = await data.getNote(id);
+        expect(note.title).toBe(expectedResults.title);
+        expect(note.text).toBe(expectedResults.text);
     });
 
-    test.skip('saveNote throws error for invalid ID', () => {
-        try {
-          data.saveNote('-1', 'a', 'a');
-          fail("Expected saveNote to throw an error for invalid ID");
-        } catch (err) {
-          expect((err as Error).message).toBe("Invalid note ID!");
-        }
+    test('saveNote throws error for invalid ID', async () => {
+        await expect(data.saveNote('-1','a','a')).rejects.toThrow('Note does not exist!');
     });
 
-    test.skip('addNode should add a new note', async ()=>{
-        const expectedResults = JSON.parse(`
-            {"id":"5","datetime":"2020-05-14T05:50:00.000Z",
-             "title":"Untitled",
-             "text":""
-            }
-            `);
+    test('addNote should add a new note', async () => {
+      const expectedResults = { title: "Untitled", text: "" };
 
-            //Mock Date.now() to return a fixed testable date-time
-            jest.spyOn(global.Date, 'now').mockReturnValue(new Date('2020-05-14T05:50:00Z').getTime());
+      // Add note and directly get it back from the new addNote
+      const note = await data.addNote();
 
-
-            //Add note 5 and check for results
-            
-            const newNoteId = await data.addNote();
-            expect(newNoteId).toBe('5');
-
-            const note = data.getNote(newNoteId.toString());
-            
-            expect(note).toEqual(expectedResults);
+      // Check note contents
+      expect(note.title).toBe(expectedResults.title);
+      expect(note.text).toBe(expectedResults.text);
     });
 
-    test.skip('deleteNote throws error if note does not exist', () => {
-        try {
-          data.deleteNote('999');
-          // If it doesn't throw, force the test to fail
-          fail('Expected deleteNote to throw an error');
-        } catch (err) {
-        expect((err as Error).message).toBe('Note does not exist!');
-        }
+
+    test('deleteNote deletes the right note', async () => {
+      const list = await data.getList();
+      const deletedId = await data.deleteNote(list[0].id);
+
+      expect(deletedId).toBe(list[0].id);
+
+      await expect(data.getNote(deletedId)).rejects.toThrow("No such note!");
     });
+
+
+    test('deleteNote throws error for invalid ID', async () => {
+      await expect(data.deleteNote('-1')).rejects.toThrow('Note does not exist!');
+    });
+
 
     test('reset sets data back to defaults', async () => {
-        // //Change the data
-        // data.addNote();
+        //Change the data
+        await data.addNote();
 
-        // //Check the data is not as expected
-        // const list = data.getList();
-        // expect(list).not.toEqual(expectedData);
-        // const id = data.addNote();
-        // expect(id).not.toEqual('5');
+        //Check the data is not as expected
+        const list = await data.getList();
+        expect(list.length).not.toBe(4);
 
         //Reset data and check it matches defaults
         await data.reset();

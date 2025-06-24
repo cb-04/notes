@@ -8,28 +8,6 @@ const db = new Utils.DBConnect();
  * @packagedocumentation
  */
 /** 
- * @ignore
-*/
-
-const listDefault = `[
-   {"id":"1","datetime":"2020-03-01%10:10","title":"My First Note"},
-   {"id":"2","datetime":"2020-03-02%11:11","title":"My Second Note"},
-   {"id":"3","datetime":"2020-03-03%12:12","title":"My Third Note"},
-   {"id":"4","datetime":"2020-03-04%13:13","title":"My Fourth Note"}
-   ]`
-
-const list = JSON.parse(listDefault);
-const objList = Utils.array2Obj(list,'id');
-
-const textDefault = `[
-   {"id":"1","text":"Text for My First Note"},
-   {"id":"2","text":"Text for My Second Note"},
-   {"id":"3","text":"Text for My Third Note"},
-   {"id":"4","text":"Text for My Fourth Note"}
-   ]`
-
-const text = JSON.parse(textDefault);
-const objText = Utils.array2Obj(text,'id');
 
 /**
  * Returns list of all notes
@@ -52,21 +30,6 @@ export async function getList() : Promise<noteListItem[]> {
     `
   });
   return(<noteListItem[]>response);
-}
-
-/**
- * Converts id to string and checks for validity
- * @param id id to convert to string
- * @throws Error if id is not valid
- */
-
-function getCheckedId(id: string) : string {
-
-  if(!(id in objList)){
-    throw new Error("Note does not exist!");
-  }else{
-    return id;
-  }
 }
 
 /**
@@ -104,17 +67,26 @@ export async function getNote(id: string) : Promise<note> {
  * @param newTitle New title for the note
  * @param newText Editted text for the note
  */
+interface updateResponse {
+  message: string,
+  skipped_hashes: Array<string>,
+  update_hashes: Array<string>
+}
 
-export function saveNote(id: string, newTitle: string, newText: string) : string {
+export async function saveNote(id: string, newTitle: string, newText: string) : Promise<string> {
+  const response = <updateResponse> await db.send({
+    "operation":"sql",
+    "sql":`
+        UPDATE notes.notes
+        SET title = '${newTitle}', text = '${newText}'
+        WHERE id = '${id}'
+    `
+   });
 
-  if (!id || !(id in objList) || !(id in objText)) {
-    throw new Error(`Invalid note ID!`);
-  }
-
-  objList[id].title = newTitle;
-  objText[id].text = newText;
-
-  return id;
+   if(response.update_hashes.length == 1)
+      return response.update_hashes[0];
+   else
+      throw new Error('Note does not exist!');
 }
 
 
@@ -123,36 +95,76 @@ export function saveNote(id: string, newTitle: string, newText: string) : string
  * 
  * @returns id of the new note created
  */
-let idCount = 4;
-export function addNote() : string {
-    const newId = (++idCount).toString();
-    objList[newId] = 
-        {id:newId,
-         datetime:Utils.getDateTime(),
-         title:'Untitled'};
-    
-    objText[newId] = {id:newId, text:''};
-    return (newId);
+interface insertResponse {
+  message: string,
+  skipped_hashes: Array<string>,
+  inserted_hashes: Array<string>
 }
+export async function addNote(): Promise<note> {
+  // Insert the note
+  await db.send({
+    operation: "sql",
+    sql: `
+      INSERT INTO notes.notes (title, text)
+      VALUES ('Untitled', '')
+    `
+  });
+
+  // Now search for the most recent Untitled note
+  const result = await db.send({
+    operation: "sql",
+    sql: `
+      SELECT id, __createdtime__ AS datetime, title, text
+      FROM notes.notes
+      WHERE title='Untitled' AND text=''
+      ORDER BY __createdtime__ DESC
+      LIMIT 1
+    `
+  }) as note[];
+
+  if (result.length === 1) return result[0];
+  else throw new Error("Insert failed");
+}
+
+
+
+
 
 /**
  * Deletes a note from the list
  * 
  * @param id : Id of the note to be deleted
  */
-
-export function deleteNote(id: string): string {
-  const checkedId = getCheckedId(id);
-
-  if (!(checkedId in objList)) {
-    throw new Error("Note does not exist!");
-  }
-
-  delete objList[checkedId];
-  delete objText[checkedId];
-
-  return checkedId;
+interface deleteResponse {
+  message: string,
+  skipped_hashes: Array<string>,
+  deleted_hashes: Array<string>
 }
+export async function deleteNote(id: string): Promise<string> {
+  const check = await db.send({
+    operation: "sql",
+    sql: `
+      SELECT id FROM notes.notes WHERE id = '${id}'
+    `
+  });
+
+  if (!Array.isArray(check) || check.length === 0)
+    throw new Error('Note does not exist!');
+
+  const response = <deleteResponse> await db.send({
+    operation: "sql",
+    sql: `
+      DELETE FROM notes.notes
+      WHERE id='${id}'
+    `
+  });
+
+  if (response.deleted_hashes.length === 1)
+    return response.deleted_hashes[0];
+  else
+    throw new Error('Failed to delete note!');
+}
+
 
 /** Resets dummy data to known state */
 const dbResetData = JSON.parse(`[
