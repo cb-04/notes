@@ -4,9 +4,8 @@
   "description": "My Notes App",
   "main": "dist/index.js",
   "scripts": {
-    "clean": "rm -rf dist",
-    "prebuild": "npm run clean && eslint . --ext .ts --fix",
-    "build": "tsc -p tsconfig.build.json && cp -r ../../www dist/www",
+    "prebuild": "eslint . --ext .ts --fix",
+    "build": "tsc -p tsconfig.build.json",
     "prestart": "npm run build",
     "start": "node .",
     "start.watch": "nodemon",
