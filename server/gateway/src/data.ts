@@ -1,5 +1,8 @@
 import * as Utils from './Utils';
 
+// Get database object
+const db = new Utils.DBConnect();
+
 /**
  * Data library for notes
  * @packagedocumentation
@@ -15,8 +18,8 @@ const listDefault = `[
    {"id":"4","datetime":"2020-03-04%13:13","title":"My Fourth Note"}
    ]`
 
-let list = JSON.parse(listDefault);
-let objList = Utils.array2Obj(list,'id');
+const list = JSON.parse(listDefault);
+const objList = Utils.array2Obj(list,'id');
 
 const textDefault = `[
    {"id":"1","text":"Text for My First Note"},
@@ -26,8 +29,7 @@ const textDefault = `[
    ]`
 
 const text = JSON.parse(textDefault);
-
-let objText = Utils.array2Obj(text,'id');
+const objText = Utils.array2Obj(text,'id');
 
 /**
  * Returns list of all notes
@@ -130,11 +132,30 @@ export function deleteNote(id: string): string {
 }
 
 /** Resets dummy data to known state */
-export function reset() : void {
-  list = JSON.parse(listDefault);
-  objList = Utils.array2Obj(list,'id');
-  const text = JSON.parse(textDefault);
-  objText = Utils.array2Obj(text,'id');
-  idCount = 4;
-}
+const dbResetData = JSON.parse(`[
+    {"title":"My First Note","text":"Text for My First Note"},
+    {"title":"My Second Note","text":"Text for My Second Note"},
+    {"title":"My Third Note","text":"Text for My Third Note"},
+    {"title":"My Fourth Note","text":"Text for My Fourth Note"} 
+  ]`);
 
+export async function reset() : Promise<void> {
+  // Delete all records in notes table
+  let response = await db.send({
+    "operation":"sql",
+    "sql":"DELETE FROM notes.notes"
+  });
+  console.log(response);
+
+  // Add test records
+  for(let i=0; i<dbResetData.length; ++i) {
+    response = await db.send({
+      "operation":"sql",
+      "sql":`
+        INSERT INTO notes.notes (title,text)
+        VALUES('${dbResetData[i].title}','${dbResetData[i].text}')
+      `
+    });
+    console.log(response);
+  }
+}
