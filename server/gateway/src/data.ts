@@ -96,11 +96,11 @@ export async function saveNote(id: string, newTitle: string, newText: string) : 
  * 
  * @returns id of the new note created
  */
-interface insertResponse {
-  message: string,
-  skipped_hashes: Array<string>,
-  inserted_hashes: Array<string>
-}
+//interface insertResponse {
+  //message: string,
+  //skipped_hashes: Array<string>,
+  //inserted_hashes: Array<string>
+//}
 export async function addNote(): Promise<note> {
   const newId = randomUUID();
 
@@ -189,7 +189,8 @@ export async function reset(): Promise<void> {
       INSERT INTO notes.notes (id, title, text)
       VALUES('${id}', '${title}', '${text}')
     `;
-    const response = await db.send({
+      //const response = 
+      await db.send({
       operation: "sql",
       sql: insertSQL
     });

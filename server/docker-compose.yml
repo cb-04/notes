@@ -2,8 +2,8 @@ version: '3'
  
 services:
   notes_db:
-    image: harperdb/harperdb
-    environment:
+    image: harperdb/harperdb:latest
+    environment: 
       - INIT_HDB_USERNAME=HDB_ADMIN
       - INIT_HDB_PASSWORD=password
     ports:
@@ -15,6 +15,10 @@ services:
     build:
       context: ./gateway
       dockerfile: Dockerfile.dev
+    environment: 
+      - dbUsername=HDB_ADMIN
+      - dbPassword=password
+      - dbUrl=http://notes_db:9925
     volumes: 
       - ./gateway:/app
       - /app/node_modules
@@ -25,7 +29,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - 3000:3000
-    environment:
+    environment: 
       - GATEWAY=notes_gateway
       - GATEWAY_PORT=8080
     volumes: 
