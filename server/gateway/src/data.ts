@@ -1,4 +1,5 @@
 import * as Utils from './Utils';
+import { randomUUID } from 'crypto';
 
 // Get database object
 const db = new Utils.DBConnect();
@@ -101,23 +102,24 @@ interface insertResponse {
   inserted_hashes: Array<string>
 }
 export async function addNote(): Promise<note> {
+  const newId = randomUUID();
+
   // Insert the note
   await db.send({
     operation: "sql",
     sql: `
-      INSERT INTO notes.notes (title, text)
-      VALUES ('Untitled', '')
+      INSERT INTO notes.notes (id, title, text)
+      VALUES ('${newId}', 'Untitled', '')
     `
   });
 
-  // Now search for the most recent Untitled note
+  // Now fetch using known ID
   const result = await db.send({
     operation: "sql",
     sql: `
       SELECT id, __createdtime__ AS datetime, title, text
       FROM notes.notes
-      WHERE title='Untitled' AND text=''
-      ORDER BY __createdtime__ DESC
+      WHERE id = '${newId}'
       LIMIT 1
     `
   }) as note[];
